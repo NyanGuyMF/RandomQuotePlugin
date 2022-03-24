@@ -15,6 +15,8 @@
 
 package voidpointer.example.localemodule.quote;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface QuoteFetcher {
-    Quote fetchRandom();
+    CompletableFuture<Quote> fetchRandom();
 }

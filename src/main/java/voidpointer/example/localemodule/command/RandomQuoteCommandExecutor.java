@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import voidpointer.example.localemodule.Message;
-import voidpointer.example.localemodule.quote.Quote;
 import voidpointer.example.localemodule.quote.QuoteFetcher;
 import voidpointer.spigot.framework.localemodule.Locale;
 
@@ -34,11 +33,16 @@ public final class RandomQuoteCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Quote randomQuote = quoteFetcher.fetchRandom();
-        locale.localize(getAppropriateMessage(sender))
-                .set("content", randomQuote.getContent())
-                .set("author", randomQuote.getAuthor())
-                .send(sender);
+        quoteFetcher.fetchRandom().thenAcceptAsync(randomQuote -> {
+            if (randomQuote == null) {
+                locale.localize(Message.COULD_NOT_FETCH_QUOTE).send(sender);
+                return;
+            }
+            locale.localize(getAppropriateMessage(sender))
+                    .set("content", randomQuote.getContent())
+                    .set("author", randomQuote.getAuthor())
+                    .send(sender);
+        });
         return true;
     }
 

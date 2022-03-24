@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public enum Message implements voidpointer.spigot.framework.localemodule.Message {
     PLUGIN_ENABLED("&ePlugin &b{plugin}&e successfully enabled!"),
     PLUGIN_DISABLED("&ePlugin &b{plugin}&e has been disabled."),
+    COULD_NOT_FETCH_QUOTE("&eI'm sorry, we couldn't find a quote for you :'("),
     QUOTE_TO_PLAYER("\\(&e&o{content} &6© {author}) [hover{&eCopy the quote}] [click.copy{{content}}]" +
             " &7(Click to copy!)"),
     QUOTE_TO_CONSOLE("&e&o{content} &6© {author}"),

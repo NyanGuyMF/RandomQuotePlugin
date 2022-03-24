@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 @RequiredArgsConstructor
@@ -44,13 +45,16 @@ public final class OnlineQuoteFetcher implements QuoteFetcher {
 
     private final Logger log;
 
-    @Override public Quote fetchRandom() {
-        try {
-            return fetch0();
-        } catch (IOException | JsonParseException exception) {
-            log.warning("Couldn't fetch a random quote: " + exception.getMessage());
-            return null;
-        }
+    /** Warning: the method is using blocking I/O! */
+    @Override public CompletableFuture<Quote> fetchRandom() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return fetch0();
+            } catch (IOException | JsonParseException exception) {
+                log.warning("Couldn't fetch a random quote: " + exception.getMessage());
+                return null;
+            }
+        });
     }
 
     private Quote fetch0() throws IOException, JsonParseException {
