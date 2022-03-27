@@ -25,10 +25,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import voidpointer.example.localemodule.Message;
 import voidpointer.example.localemodule.quote.QuoteFetcher;
 import voidpointer.spigot.framework.localemodule.Locale;
+import voidpointer.spigot.framework.localemodule.annotation.AutowiredLocale;
 
 @RequiredArgsConstructor
 public final class RandomQuoteCommandExecutor implements CommandExecutor {
-    @NonNull private final Locale locale;
+    @AutowiredLocale private static Locale locale;
     @NonNull private final QuoteFetcher quoteFetcher;
 
     @Override

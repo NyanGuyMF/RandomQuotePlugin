@@ -19,20 +19,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import voidpointer.example.localemodule.command.RandomQuoteCommandExecutor;
 import voidpointer.example.localemodule.quote.OnlineQuoteFetcher;
+import voidpointer.spigot.framework.localemodule.annotation.LocaleAnnotationResolver;
+import voidpointer.spigot.framework.localemodule.annotation.PluginLocale;
 import voidpointer.spigot.framework.localemodule.config.LocaleFileConfiguration;
 
 public final class RandomQuotePlugin extends JavaPlugin {
-    private LocaleFileConfiguration locale;
+    @PluginLocale(defaultMessages=Message.class, searchForInjection=true)
+    private static LocaleFileConfiguration locale;
 
     @Override public void onLoad() {
-        locale = new LocaleFileConfiguration(this);
-        locale.addDefaults(Message.values());
-        locale.save();
+        LocaleAnnotationResolver.resolve(this);
     }
 
     @Override public void onEnable() {
-        new RandomQuoteCommandExecutor(locale, new OnlineQuoteFetcher(getLogger()))
-                .register(this);
+        new RandomQuoteCommandExecutor(new OnlineQuoteFetcher(getLogger())).register(this);
         locale.localize(Message.PLUGIN_ENABLED).set("plugin", getName())
                 .send(Bukkit.getConsoleSender());
     }
